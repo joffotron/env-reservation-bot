@@ -1,0 +1,26 @@
+service: reservation-bot
+
+provider:
+  name: aws
+  runtime: ruby2.7
+  stackName: ${self:service}
+  region: ${opt:region, 'ap-southeast-2'}
+  iamRoleStatements:
+    - Effect: "Allow"
+      Action:
+        - kms:Decrypt
+        - kms:GenerateDatakey
+      Resource: "${ssm:/reservationbot/kms.key.arn}"
+
+functions:
+  reservationbot:
+    memorySize: 256
+    name: ${opt:stage}-reservation-bot
+    handler: handler.Handler.action
+    events:
+    - http:
+        path: "/action"
+        method: post
+    environment:
+      VERIFICATION_TOKEN: ${ssm:/reservationbot/slack_verification_token}
+      BOT_TOKEN: ${ssm:/reservationbot/slack_bot_token}
