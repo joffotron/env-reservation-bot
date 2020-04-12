@@ -1,8 +1,7 @@
-require_relative 'utils/kms'
 require 'slack-ruby-client'
 
 class SlackAPI
-  def initialize(slack_token)
+  def initialize(slack_token:)
     Slack.configure do |config|
       config.token = slack_token
       raise 'Missing ENV[BOT_TOKEN]!' unless config.token
@@ -23,4 +22,3 @@ class SlackAPI
 
   attr_reader :client
 end
-

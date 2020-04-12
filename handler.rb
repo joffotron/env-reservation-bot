@@ -1,5 +1,4 @@
 require 'json'
-require_relative 'lib/utils/kms'
 require_relative 'lib/slack_api'
 
 class Handler
@@ -14,10 +13,10 @@ class Handler
 
   def initialize(payload)
     @payload   = payload
-    @kms       = Utils::KMS.new
-    @slack_api = SlackAPI.new(kms.decrypt(ENV['BOT_TOKEN']))
+    @slack_api = SlackAPI.new(slack_token: ENV['BOT_TOKEN'])
+    @slack_api = SlackAPI.new(slack_token: ENV['BOT_TOKEN'])
   end
-  attr_reader :payload, :kms, :slack_api
+  attr_reader :payload, :slack_api
 
   #
   # @return [Hash] the response body
@@ -34,7 +33,7 @@ class Handler
   private
 
   def token_verified?
-    kms.decrypt(ENV['VERIFICATION_TOKEN']) == payload['token']
+    ENV['VERIFICATION_TOKEN'] == payload['token']
   end
 
   def user_id
