@@ -18,6 +18,11 @@ class SlackAPI
     profile.real_name || profile.display_name
   end
 
+  def talk_back(user_id:, channel:, message:)
+    text = "<@#{user_id}> #{message}"
+    client.chat_postMessage(channel: channel, text: text, as_user: true)
+  end
+
   private
 
   attr_reader :client

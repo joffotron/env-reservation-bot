@@ -21,10 +21,6 @@ functions:
     - http:
         path: "/action"
         method: post
-        response:
-          headers:
-            Content-Type: "application/json"
-            X-Slack-No-Retry: "1"
     environment:
       VERIFICATION_TOKEN: ${ssm:/reservationbot/slack.verification.token~true}
       BOT_TOKEN: ${ssm:/reservationbot/slack.bot.oauth.token~true}
