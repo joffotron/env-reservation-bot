@@ -21,12 +21,20 @@ class Handler
   #     'event_time': 1496764428
   # }
   def self.action(event:, context:)
-    p event.inspect
+    payload = JSON.parse(event['body'])
+    p payload
 
-    {
+    response = {
       statusCode: 200,
-      body:    JSON.generate({ challenge: event['challenge'] }),
-      headers: JSON.generate({ 'X-Slack-No-Retry': 1 })
+      body:     { challenge: payload['challenge'] }.to_json
     }
+    p response
+
+    response
+
+  rescue StandardError => e
+    puts e.message
+    puts e.backtrace.inspect
+    { statusCode: 500, body: {error: e.message, trace: e.backtrace&.join("\n")}.to_json }
   end
 end

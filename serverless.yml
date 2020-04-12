@@ -15,12 +15,16 @@ provider:
 functions:
   reservationbot:
     memorySize: 256
-    name: ${opt:stage}-reservation-bot
+    name: ${self:service}
     handler: handler.Handler.action
     events:
     - http:
         path: "/action"
         method: post
+        response:
+          headers:
+            Content-Type: "application/json"
+            X-Slack-No-Retry: "1"
     environment:
-      VERIFICATION_TOKEN: ${ssm:/reservationbot/slack_verification_token}
-      BOT_TOKEN: ${ssm:/reservationbot/slack_bot_token}
+      VERIFICATION_TOKEN: ${ssm:/reservationbot/slack.verification.token}
+      BOT_TOKEN: ${ssm:/reservationbot/slack.bot.oauth.token}

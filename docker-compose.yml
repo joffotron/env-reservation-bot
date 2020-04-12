@@ -11,10 +11,10 @@ services:
       AWS_SECRET_ACCESS_KEY:
       AWS_SESSION_TOKEN:
       AWS_SECURITY_TOKEN:
-#
-#  lambda_tests:
-#    build:
-#      context: .
-#      dockerfile: Dockerfile.rspec
-#    volumes:
-#    - .:/var/task/
+
+  compile:
+    build:
+      context: .
+    volumes:
+    - .:/var/task/
+    command: .buildkite/bundle.sh
