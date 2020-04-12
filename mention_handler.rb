@@ -15,7 +15,11 @@ class MentionHandler
       payload:   payload.to_json
     })
 
-    {statusCode: 200, body: { challenge: payload['challenge'] }.to_json }
+    {
+      statusCode: 200,
+      body: { challenge: payload['challenge'] }.to_json,
+      headers: { 'X-Slack-No-Retry': '1'}
+    }
   rescue StandardError => e
     puts e.message
     puts e.backtrace.inspect
