@@ -17,4 +17,4 @@ services:
       context: .
     volumes:
     - .:/var/task/
-    command: .buildkite/bundle.sh
+    command: /var/task/.buildkite/bundle.sh

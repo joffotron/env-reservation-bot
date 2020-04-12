@@ -1,6 +1,6 @@
 require 'json'
-require 'lib/utils/kms'
-require 'lib/slack_api'
+require_relative 'lib/utils/kms'
+require_relative 'lib/slack_api'
 
 class Handler
   def self.action(event:, context:)

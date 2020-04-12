@@ -1,4 +1,4 @@
-require 'utils/kms'
+require_relative 'utils/kms'
 require 'slack-ruby-client'
 
 class SlackAPI
