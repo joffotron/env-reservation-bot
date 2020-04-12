@@ -6,21 +6,27 @@ provider:
   stackName: ${self:service}
   region: ${opt:region, 'ap-southeast-2'}
   iamRoleStatements:
-    - Effect: "Allow"
-      Action:
-        - kms:Decrypt
-        - kms:GenerateDatakey
-      Resource: "${ssm:/reservationbot/kms.key.arn}"
+  - Effect: "Allow"
+    Action:
+    - lambda:InvokeFunction
+    Resource: "*"
 
 functions:
   reservationbot:
     memorySize: 256
     name: ${self:service}
-    handler: handler.Handler.action
+    handler: mention_handler.MentionHandler.incoming_mention
     events:
     - http:
         path: "/action"
         method: post
     environment:
       VERIFICATION_TOKEN: ${ssm:/reservationbot/slack.verification.token~true}
+      CONCIERGE_FN: ${self:functions.reservation_concierge.name}
+
+  reservation_concierge:
+    memorySize: 256
+    name: ${self:service}-concierge
+    handler: concierge_handler.ConciergeHandler.handle
+    environment:
       BOT_TOKEN: ${ssm:/reservationbot/slack.bot.oauth.token~true}
