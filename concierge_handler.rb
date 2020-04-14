@@ -16,12 +16,16 @@ class ConciergeHandler
 
   def action
     requesting_user = slack_api.name_for_user(user_id)
-    p "Received mention from #{requesting_user}"
+    p "Received mention from #{requesting_user}: #{incoming_message}"
 
-    reservation = Reservation.from_message(message: incoming_message, user: requesting_user)
-    # Concierge.new.reserve(reservation: reservation)
-
-    slack_api.talk_back(user_id: user_id, channel: incoming_channel, message: reservation.human_readable)
+    case incoming_message
+      when /@\w+ list$/
+        reply('Currently Reserved environments are: AA, BB, CC')
+      else
+        reservation = Reservation.from_message(message: incoming_message, user: requesting_user)
+        # Concierge.new.reserve(reservation: reservation)
+        reply(reservation.human_readable)
+    end
   end
 
   private
@@ -36,5 +40,9 @@ class ConciergeHandler
 
   def incoming_channel
     Slack::Messages::Formatting.unescape(payload['event']['channel'])
+  end
+
+  def reply(message)
+    slack_api.talk_back(user_id: user_id, channel: incoming_channel, message: message)
   end
 end

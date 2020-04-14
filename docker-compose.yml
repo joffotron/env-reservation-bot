@@ -2,7 +2,7 @@ version: '3.7'
 
 services:
   serverless:
-    image: amaysim/serverless:1.67.2
+    image: amaysim/serverless:1.67.3
     command: serverless
     volumes:
     - .:/opt/app
