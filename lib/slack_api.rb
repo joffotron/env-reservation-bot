@@ -1,4 +1,5 @@
 require 'slack-ruby-client'
+require "ostruct"
 
 class SlackAPI
   def initialize(slack_token:)
@@ -11,11 +12,13 @@ class SlackAPI
     @client.auth_test
   end
 
-  def name_for_user(user_id)
-    profile = client.users_info(user: user_id)&.user&.profile
+  def user_details(user_id)
+    user = client.users_info(user: user_id)&.user
+    profile = user&.profile
+
     return 'Unknown' unless profile
 
-    profile.real_name || profile.display_name
+    OpenStruct.new(name: (profile.display_name || profile.real_name), timezone: user.tz)
   end
 
   def talk_back(user_id:, channel:, message:)

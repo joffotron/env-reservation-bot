@@ -15,8 +15,8 @@ class ConciergeHandler
   attr_reader :payload, :slack_api
 
   def action
-    requesting_user = slack_api.name_for_user(user_id)
-    p "Received mention from #{requesting_user}: #{incoming_message}"
+    requesting_user = slack_api.user_details(user_id)
+    p "Received mention from #{requesting_user.name}: #{incoming_message}"
 
     case incoming_message
       when /@\w+ list$/

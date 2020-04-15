@@ -1,8 +1,10 @@
 require 'strscan'
 require 'time'
+require 'active_support/core_ext/time'
+require 'active_support/core_ext/numeric/time'
 
 class Reservation
-  attr_reader :environment, :start_time, :end_time, :user, :comment
+  attr_reader :environment, :start_time, :end_time, :user_name, :timezone, :comment
 
   def self.from_message(message:, user:)
     reservation = Reservation.new(user: user)
@@ -11,7 +13,8 @@ class Reservation
   end
 
   def initialize(user:, environment: nil, start_time: nil, end_time: nil, comment: nil)
-    @user = user
+    @user_name = user.name
+    @timezone = user.timezone
     @environment = environment
     @start_time = start_time
     @end_time = end_time
@@ -23,7 +26,7 @@ class Reservation
     reason = comment.nil? ? 'No reason given' : "Reason: #{comment}"
 
     <<~MSG
-      Environment #{environment} is reserved by #{user} 
+      Environment `#{environment}` is reserved by #{user_name}
       From #{format_time(start_time)}, #{end_msg}
       #{reason}
     MSG
@@ -35,7 +38,7 @@ class Reservation
   #
   def parse_message!(msg)
     s = StringScanner.new(msg)
-    s.skip_until(/@\w+\s/)
+    s.skip_until(/@\w+\b/)
 
     @environment = s.scan_until(/[a-z-]+/)&.strip
     start_input  = s.scan_until(/now|\d{2}:\d{2}|\d{1,2}h/)&.strip
@@ -53,19 +56,19 @@ class Reservation
   def parse_time(input)
     case input
       when '-' then return nil
-      when 'now' then return Time.now
+      when 'now' then return DateTime.now
       when /\d{1,2}h/
         hours = input.match(/\d{1,2}/)[0].to_i
-        return Time.now + (hours * 60 * 60)
+        return DateTime.now + hours.hours
       else
-        return Time.parse(input)
+        return Time.parse(input, Date.today)
     end
   end
 
   def format_time(time)
     return '' unless time
 
-    time.strftime('%R')
+    time.in_time_zone(timezone).strftime('%a %d, %R')
   end
 
 end
