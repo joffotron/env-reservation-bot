@@ -1,5 +1,8 @@
 service: reservation-bot
 
+plugins:
+  - serverless-pseudo-parameters
+
 provider:
   name: aws
   runtime: ruby2.7
@@ -10,6 +13,14 @@ provider:
     Action:
     - lambda:InvokeFunction
     Resource: "*"
+  - Effect: "Allow"
+    Action:
+    - dynamodb:PutItem
+    - dynamodb:UpdateItem
+    - dynamodb:DeleteItem
+    - dynamodb:Query
+    - dynamodb:Scan
+    Resource: arn:aws:dynamodb:${opt:region, 'ap-southeast-2'}:#{AWS::AccountId}:table/${self:resources.Resources.ReservationsTable.Properties.TableName}
 
 functions:
   reservationbot:
@@ -39,3 +50,17 @@ functions:
     handler: concierge_handler.ConciergeHandler.handle
     environment:
       BOT_TOKEN: ${ssm:/reservationbot/slack.bot.oauth.token~true}
+
+resources:
+  Resources:
+    ReservationsTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: "${self:service}-reservations"
+        BillingMode: PAY_PER_REQUEST
+        AttributeDefinitions:
+        - AttributeName: "environment"
+          AttributeType: "S"
+        KeySchema:
+        - AttributeName: "environment"
+          KeyType: HASH

@@ -2,7 +2,10 @@ version: '3.7'
 
 services:
   serverless:
-    image: amaysim/serverless:1.67.2
+    build:
+      context: .
+      dockerfile: Dockerfile.sls
+    image: reservebot_sls
     command: serverless
     volumes:
     - .:/opt/app
