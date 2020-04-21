@@ -24,6 +24,15 @@ functions:
       VERIFICATION_TOKEN: ${ssm:/reservationbot/slack.verification.token~true}
       CONCIERGE_FN: ${self:functions.reservation_concierge.name}
 
+  reservation_lister:
+    memorySize: 256
+    name: ${self:service}-lister
+    handler: list_handler.ListHandler.list_reservations
+    events:
+    - http:
+        path: "/list"
+        method: get
+
   reservation_concierge:
     memorySize: 256
     name: ${self:service}-concierge
