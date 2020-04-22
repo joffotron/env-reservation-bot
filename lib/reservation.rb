@@ -32,6 +32,10 @@ class Reservation
     MSG
   end
 
+  def current?
+    start_time <= Time.now && end_time >= Time.now
+  end
+
   # `@reservebot staging-nz now 1h just testing`
   # `@reservebot demo-au 13:00 -`
   # `@reservebot demo-au free`
@@ -40,15 +44,15 @@ class Reservation
     s = StringScanner.new(msg)
     s.skip_until(/@\w+\b/)
 
-    @environment = s.scan_until(/[a-z-]+/)&.strip
-    start_input  = s.scan_until(/now|\d{2}:\d{2}|\d{1,2}h/)&.strip
-    @start_time = parse_time(start_input)
+    @environment = sanitize(s.scan_until(/[a-z-]+/))
+    start_input  = sanitize(s.scan_until(/now|\d{2}:\d{2}|\d{1,2}h/))
+    @start_time  = parse_time(start_input)
 
     return if s.eos?
-    end_input   = s.scan_until(/-|\d{2}:\d{2}|\d{1,2}h/)&.strip
+    end_input = sanitize(s.scan_until(/-|\d{2}:\d{2}|\d{1,2}h/))
     @end_time = parse_time(end_input)
 
-    @comment     = s.rest&.strip
+    @comment = s.rest&.strip
   end
 
   private
@@ -71,4 +75,9 @@ class Reservation
     time.in_time_zone(timezone).strftime('%a %d, %R')
   end
 
+  def sanitize(string)
+    return '' unless string
+
+    string.gsub(/[^a-zA-Z0-9\-_]/, '')
+  end
 end

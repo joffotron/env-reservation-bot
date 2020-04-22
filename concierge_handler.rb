@@ -23,7 +23,7 @@ class ConciergeHandler
         reply('Currently Reserved environments are: AA, BB, CC')
       else
         reservation = Reservation.from_message(message: incoming_message, user: requesting_user)
-        # Concierge.new.reserve(reservation: reservation)
+        Concierge.new.reserve(reservation: reservation)
         reply(reservation.human_readable)
     end
   end

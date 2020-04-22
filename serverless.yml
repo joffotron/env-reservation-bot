@@ -43,6 +43,8 @@ functions:
     - http:
         path: "/list"
         method: get
+    environment:
+      DYNAMO_TABLE: ${self:resources.Resources.ReservationsTable.Properties.TableName}
 
   reservation_concierge:
     memorySize: 256
@@ -50,6 +52,7 @@ functions:
     handler: concierge_handler.ConciergeHandler.handle
     environment:
       BOT_TOKEN: ${ssm:/reservationbot/slack.bot.oauth.token~true}
+      DYNAMO_TABLE: ${self:resources.Resources.ReservationsTable.Properties.TableName}
 
 resources:
   Resources:
