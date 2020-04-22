@@ -20,7 +20,7 @@ class ConciergeHandler
 
     case incoming_message
       when /@\w+ list$/
-        reply('Currently Reserved environments are: AA, BB, CC')
+        reply("Currently Reserved environments are: #{reserved_envs.join(', ')}")
       else
         reservation = Reservation.from_message(message: incoming_message, user: requesting_user)
         Concierge.new.reserve(reservation: reservation)
@@ -44,5 +44,9 @@ class ConciergeHandler
 
   def reply(message)
     slack_api.talk_back(user_id: user_id, channel: incoming_channel, message: message)
+  end
+
+  def reserved_envs
+    Concierge.new.reservations.map(&:environment)
   end
 end

@@ -7,19 +7,12 @@ require 'aws-sdk-dynamodb'
 
 class Concierge
   def reserve(reservation:)
-    item = {
-      environment: reservation.environment.strip,
-      start_time:  reservation.start_time.rfc3339.strip,
-      end_time:    reservation.end_time.rfc3339&.strip,
-      user_name:   reservation.user_name.strip,
-      timezone:    reservation.timezone.strip,
-      comment:     reservation.comment&.strip
-    }
+    if reservation.start_time.nil?
+      cancel_reservation(reservation)
+      return
+    end
 
-    dynamo.put_item(table_name: ENV['DYNAMO_TABLE'], item: item )
-  rescue Aws::DynamoDB::Errors::ServiceError => error
-    puts 'Unable to add reservation:'
-    puts error.message
+    make_reservation(reservation)
   end
 
   def reservations
@@ -43,6 +36,32 @@ class Concierge
 
   private
 
+  def make_reservation(reservation)
+    item = {
+      environment: empty_check(reservation.environment),
+      start_time:  empty_check(reservation.start_time&.rfc3339),
+      end_time:    empty_check(reservation.end_time&.rfc3339),
+      user_name:   empty_check(reservation.user_name),
+      timezone:    empty_check(reservation.timezone),
+      comment:     empty_check(reservation.comment)
+    }
+
+    dynamo.put_item(table_name: ENV['DYNAMO_TABLE'], item: item)
+  rescue Aws::DynamoDB::Errors::ServiceError => error
+    puts 'Unable to add reservation:'
+    puts error.message
+  end
+
+  def cancel_reservation(reservation)
+    dynamo.delete_item(
+      key: { 'environment' => reservation.environment},
+      table_name: ENV['DYNAMO_TABLE']
+    )
+  rescue Aws::DynamoDB::Errors::ServiceError => error
+    puts 'Unable to remove reservation:'
+    puts error.message
+  end
+
   def dynamo
     @dynamo ||= Aws::DynamoDB::Client.new
   end
@@ -53,4 +72,9 @@ class Concierge
     nil
   end
 
+  def empty_check(string)
+    return nil if string.nil? || string.length == 0
+
+    string
+  end
 end

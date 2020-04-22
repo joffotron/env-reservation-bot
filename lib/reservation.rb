@@ -22,6 +22,8 @@ class Reservation
   end
 
   def human_readable
+    return "#{environment} is now free for use" if start_time.nil?
+
     end_msg = end_time.nil? ? 'with no specified end' : "until #{format_time(end_time)}"
     reason = comment.nil? ? 'No reason given' : "Reason: #{comment}"
 
@@ -33,7 +35,9 @@ class Reservation
   end
 
   def current?
-    start_time <= Time.now && end_time >= Time.now
+    return false if start_time.nil?
+
+    start_time <= Time.now && (end_time.nil? || end_time >= Time.now)
   end
 
   # `@reservebot staging-nz now 1h just testing`
@@ -59,7 +63,7 @@ class Reservation
 
   def parse_time(input)
     case input
-      when '-' then return nil
+      when '-', 'free', '', nil then return nil
       when 'now' then return DateTime.now
       when /\d{1,2}h/
         hours = input.match(/\d{1,2}/)[0].to_i
