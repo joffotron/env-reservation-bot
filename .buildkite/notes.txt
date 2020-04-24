@@ -6,5 +6,4 @@ docker-compose run --rm -w "/opt/app/" serverless sls deploy --verbose
 TODO:
 
 - Add KMS encryption of secrets
-- Add the https://serverless.com/plugins/serverless-pseudo-parameters/ plugin and tidy up the IAM reference
 

@@ -21,6 +21,8 @@ class ConciergeHandler
     case incoming_message
       when /@\w+ list$/
         reply("Currently Reserved environments are: #{reserved_envs.join(', ')}")
+      when /@\w+ help$/
+        reply(help_me_obi_wan)
       else
         reservation = Reservation.from_message(message: incoming_message, user: requesting_user)
         Concierge.new.reserve(reservation: reservation)
@@ -48,5 +50,25 @@ class ConciergeHandler
 
   def reserved_envs
     Concierge.new.reservations.map(&:environment)
+  end
+
+  def help_me_obi_wan
+    <<~TEXT
+      ReserveBot is used for telling other developers not to deploy changes over the top of the environment you are using.
+    
+      Example usages are:
+
+      // Reserve for 1 hour starting now, with a comment
+      `@reservebot staging-au now 1h Just Testing`
+
+      // Reserve starting at 1pm with no set end (no comment)
+      `@reservebot demo-us 13:00 -`
+
+      // Release an environment again
+      `@reservebot staging-nz free`
+
+      // See what's currently held
+      `@reservebot list`
+    TEXT
   end
 end
