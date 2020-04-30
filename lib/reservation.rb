@@ -49,12 +49,14 @@ class Reservation
     s.skip_until(/@\w+\b/)
 
     @environment = sanitize(s.scan_until(/[a-z-]+/))
-    start_input  = sanitize(s.scan_until(/now|\d{2}:\d{2}|\d{1,2}h/))
+    start_input  = sanitize(s.scan_until(/now|\d{1,2}:\d{2}|\d{1,2}h/))
     @start_time  = parse_time(start_input)
+    p "Set start time as #{@start_time}"
 
     return if s.eos?
     end_input = sanitize(s.scan_until(/-|\d{2}:\d{2}|\d{1,2}h/))
     @end_time = parse_time(end_input)
+    p "Set end time as #{@end_time}"
 
     @comment = s.rest&.strip
   end
@@ -66,11 +68,26 @@ class Reservation
       when '-', 'free', '', nil then return nil
       when 'now' then return DateTime.now
       when /\d{1,2}h/
-        hours = input.match(/\d{1,2}/)[0].to_i
-        return DateTime.now + hours.hours
+        return parse_offset_time(input)
       else
-        return Time.parse(input, Date.today)
+        return parse_today_or_tomorrow(input)
     end
+  end
+
+  def parse_today_or_tomorrow(input)
+    time = tz_parse(input, Date.today)
+    time < Time.now.utc ? tz_parse(input, Date.tomorrow) : time
+  end
+
+  def parse_offset_time(input)
+    hours = input.match(/\d{1,2}/)[0].to_i
+    return @start_time + hours.hours if @start_time
+
+    DateTime.now + hours.hours
+  end
+
+  def tz_parse(*args)
+    ActiveSupport::TimeZone[timezone]&.parse(*args).utc
   end
 
   def format_time(time)
@@ -82,6 +99,6 @@ class Reservation
   def sanitize(string)
     return '' unless string
 
-    string.gsub(/[^a-zA-Z0-9\-_]/, '')
+    string.gsub(/[^a-zA-Z0-9:\-_]/, '')
   end
 end
