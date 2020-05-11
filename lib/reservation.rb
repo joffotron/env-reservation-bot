@@ -49,12 +49,12 @@ class Reservation
     s.skip_until(/@\w+\b/)
 
     @environment = sanitize(s.scan_until(/[a-z-]+/))
-    start_input  = sanitize(s.scan_until(/now|\d{1,2}:\d{2}|\d{1,2}h/))
+    start_input  = sanitize(s.scan_until(/now|\d{1,2}:\d{2}|\d{1,2}[hrs]+/))
     @start_time  = parse_time(start_input)
     p "Set start time as #{@start_time}"
 
     return if s.eos?
-    end_input = sanitize(s.scan_until(/-|\d{2}:\d{2}|\d{1,2}h/))
+    end_input = sanitize(s.scan_until(/-|\d{2}:\d{2}|\d{1,2}[hrs]+/))
     @end_time = parse_time(end_input)
     p "Set end time as #{@end_time}"
 
@@ -67,7 +67,7 @@ class Reservation
     case input
       when '-', 'free', '', nil then return nil
       when 'now' then return DateTime.now
-      when /\d{1,2}h/
+      when /\d{1,2}[hrs]+/
         return parse_offset_time(input)
       else
         return parse_today_or_tomorrow(input)
