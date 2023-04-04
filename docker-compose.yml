@@ -2,10 +2,8 @@ version: '3.7'
 
 services:
   serverless:
-    build:
-      context: .
-      dockerfile: Dockerfile.sls
-    image: reservebot_sls
+    platform: "linux/amd64"
+    image: amaysim/serverless:3.29.0
     command: serverless
     volumes:
     - .:/opt/app
@@ -16,6 +14,7 @@ services:
       AWS_SECURITY_TOKEN:
 
   compile:
+    platform: "linux/amd64"
     build:
       context: .
     volumes:

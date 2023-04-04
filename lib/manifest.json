@@ -1,0 +1,39 @@
+{
+    "display_information": {
+        "name": "Stack Reservation Bot",
+        "description": "Reserve staging environment stacks",
+        "background_color": "#208366",
+        "long_description": "Reserve staging environment stacks on a specific stack and time limited basis. \r\n\r\nExample usages are:\r\n// Reserve for 1 hour starting now, with a comment\r\n@reservebot user-experience now 1h Just Testing\r\n\r\n// Reserve starting at 1pm with no set end (no comment)\r\n@reservebot customer-lifecycle 13:00 -\r\n\r\n// Release an environment again\r\n@reservebot forecasting free\r\n\r\n// See what's currently held\r\n@reservebot list"
+    },
+    "features": {
+        "bot_user": {
+            "display_name": "Stack Reservation Bot",
+            "always_online": true
+        }
+    },
+    "oauth_config": {
+        "scopes": {
+            "bot": [
+                "app_mentions:read",
+                "chat:write",
+                "im:history",
+                "im:read",
+                "im:write",
+                "users.profile:read",
+                "users:write",
+                "users:read"
+            ]
+        }
+    },
+    "settings": {
+        "event_subscriptions": {
+            "request_url": "https://ENTER_WHEN_CONFIGURED/action",
+            "bot_events": [
+                "app_mention"
+            ]
+        },
+        "org_deploy_enabled": false,
+        "socket_mode_enabled": false,
+        "token_rotation_enabled": false
+    }
+}

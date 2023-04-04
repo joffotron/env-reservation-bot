@@ -54,18 +54,18 @@ class ConciergeHandler
 
   def help_me_obi_wan
     <<~TEXT
-      ReserveBot is used for telling other developers not to deploy changes over the top of the environment you are using.
+      Reservebot - Reserve staging environment stacks on a specific stack and time limited basis. 
     
       Example usages are:
 
       // Reserve for 1 hour starting now, with a comment
-      `@reservebot staging-au now 1h Just Testing`
+      `@reservebot user-experience now 1h Just Testing`
 
       // Reserve starting at 1pm with no set end (no comment)
-      `@reservebot demo-us 13:00 -`
+      `@reservebot customer-lifecycle 13:00 -`
 
       // Release an environment again
-      `@reservebot staging-nz free`
+      `@reservebot forecasting free`
 
       // See what's currently held
       `@reservebot list`
