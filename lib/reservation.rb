@@ -48,7 +48,7 @@ class Reservation
     s = StringScanner.new(msg)
     s.skip_until(/@\w+\b/)
 
-    @environment = sanitize(s.scan_until(/[a-z-]+/))
+    @environment = sanitize(s.scan_until(/[a-z-:]+/))
     start_input  = sanitize(s.scan_until(/now|\d{1,2}:\d{2}|\d{1,2}[hrs]+/))
     @start_time  = parse_time(start_input)
     p "Set start time as #{@start_time}"

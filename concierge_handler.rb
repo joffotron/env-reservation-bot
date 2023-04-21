@@ -21,6 +21,8 @@ class ConciergeHandler
     case incoming_message
       when /@\w+ list$/
         reply("Currently Reserved environments are: #{reserved_envs.join(', ')}")
+      when /@\w+ supported-envs/
+        reply(supported_envs)
       when /@\w+ help$/
         reply(help_me_obi_wan)
       else
@@ -62,13 +64,45 @@ class ConciergeHandler
       `@reservebot user-experience now 1h Just Testing`
 
       // Reserve starting at 1pm with no set end (no comment)
-      `@reservebot customer-lifecycle 13:00 -`
+      `@reservebot backend:lifecycle 13:00 -`
 
       // Release an environment again
-      `@reservebot forecasting free`
+      `@reservebot smartshift free`
 
       // See what's currently held
       `@reservebot list`
+
+      // List environments supported by CI
+      `@reservebot supported-envs`
+      TEXT
+  end
+
+  def supported_envs
+    <<~TEXT
+      Environments that CI will recognise:
+      * admin-web
+      * cba-signup
+      * mobile-app
+      * webapp
+      * api
+      * cba-api
+      * cognito-triggers
+      * pg-migrations
+      * internal-process
+      
+      * Backend stacks:
+        * smartshift
+        * smartshift-enrollments
+        * demand-response
+        * workflow
+        * jump
+        * office-signage
+        * ux (user-experience)
+        * forecasting
+        * lifecycle
+        * notifications
+        * operations
+        * telemetry
     TEXT
   end
 end
