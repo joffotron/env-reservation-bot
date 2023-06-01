@@ -20,7 +20,7 @@ class ConciergeHandler
 
     case incoming_message
       when /@\w+ list$/
-        reply("Currently Reserved environments are: #{reserved_envs.join(', ')}")
+        reply(nicer_env_list)
       when /@\w+ supported-envs/
         reply(supported_envs)
       when /@\w+ help$/
@@ -52,6 +52,19 @@ class ConciergeHandler
 
   def reserved_envs
     Concierge.new.reservations.map(&:environment)
+  end
+
+  def nicer_env_list
+    reservations = Concierge.new.reservations
+    if reservations.empty? return 'All environments are free for use'
+
+    reservations.reduce('') do |acc, e|
+      end_time = DateTime.parse(e.end_time).in_time_zone(e.timezone).strftime('%a %d, %R')
+      acc += <<~TEXT
+        Environment #{e.user_name} has #{e.environment} until #{e.end_time}. Reason: #{e.reason}
+
+      TEXT
+    end
   end
 
   def help_me_obi_wan
