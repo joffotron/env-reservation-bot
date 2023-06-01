@@ -50,21 +50,20 @@ class ConciergeHandler
     slack_api.talk_back(user_id: user_id, channel: incoming_channel, message: message)
   end
 
-  def reserved_envs
-    Concierge.new.reservations.map(&:environment)
-  end
-
   def nicer_env_list
     reservations = Concierge.new.reservations
-    if reservations.empty? return 'All environments are free for use'
+    return 'All environments are free for use' if reservations.empty?
 
+    the_list="\n"
     reservations.reduce('') do |acc, e|
-      end_time = DateTime.parse(e.end_time).in_time_zone(e.timezone).strftime('%a %d, %R')
-      acc += <<~TEXT
-        Environment #{e.user_name} has #{e.environment} until #{e.end_time}. Reason: #{e.reason}
+      end_time = e.end_time.in_time_zone(e.timezone).strftime('%a %d, %R')
+      the_list += <<~TEXT
+        #{e.user_name} has `#{e.environment}` until #{end_time}. Reason: #{e.comment}
 
       TEXT
     end
+
+    the_list
   end
 
   def help_me_obi_wan
