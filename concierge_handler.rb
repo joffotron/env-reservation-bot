@@ -69,17 +69,23 @@ class ConciergeHandler
   def help_me_obi_wan
     <<~TEXT
       Reservebot - Reserve staging environment stacks on a specific stack and time limited basis. 
+
+      Basic Syntax is:
+      @reservebot <env name> <start time> <end time> <comment>
     
       Example usages are:
 
       // Reserve for 1 hour starting now, with a comment
-      `@reservebot user-experience now 1h Just Testing`
+      `@reservebot #{env_list.sample} now 1h Just Testing`
 
-      // Reserve starting at 1pm with no set end (no comment)
-      `@reservebot backend:lifecycle 13:00 -`
+      // Reserve starting at 1pm with no set end (i.e use '-') 
+      `@reservebot #{env_list.sample} 13:00 - Reserving for good reasons`
+
+      // Reserve starting at 1pm with a specific end time (and no comment)
+      `@reservebot #{env_list.sample} 13:00 16:45`
 
       // Release an environment again
-      `@reservebot smartshift free`
+      `@reservebot #{env_list.sample} free`
 
       // See what's currently held
       `@reservebot list`
@@ -89,32 +95,14 @@ class ConciergeHandler
       TEXT
   end
 
+  def env_list
+    ENV['SUPPORTED_ENVS'].split(',')
+  end
+
   def supported_envs
-    <<~TEXT
+    message = <<~TEXT
       Environments that CI will recognise:
-      * admin-web
-      * cba-signup
-      * mobile-app
-      * webapp
-      * api
-      * cba-api
-      * cognito-triggers
-      * pg-migrations
-      * internal-process
-      
-      * Backend stacks:
-        * smartshift
-        * smartshift-enrollments
-        * demand-response
-        * workflow
-        * jump
-        * office-signage
-        * ux (user-experience)
-        * forecasting
-        * lifecycle
-        * notifications
-        * operations
-        * telemetry
     TEXT
+    message + env_list.map { |env| "* #{env}\n" }.join
   end
 end

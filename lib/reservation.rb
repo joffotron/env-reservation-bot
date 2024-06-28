@@ -1,5 +1,6 @@
 require 'strscan'
 require 'time'
+require 'active_support'
 require 'active_support/core_ext/time'
 require 'active_support/core_ext/numeric/time'
 
@@ -48,7 +49,7 @@ class Reservation
     s = StringScanner.new(msg)
     s.skip_until(/@\w+\b/)
 
-    @environment = sanitize(s.scan_until(/[a-z-:]+/))
+    @environment = sanitize(s.scan_until(/[a-z\-:]+/))
     start_input  = sanitize(s.scan_until(/now|\d{1,2}:\d{2}|\d{1,2}[hrs]+/))
     @start_time  = parse_time(start_input)
     p "Set start time as #{@start_time}"
@@ -58,7 +59,7 @@ class Reservation
     @end_time = parse_time(end_input)
     p "Set end time as #{@end_time}"
 
-    @comment = s.rest&.strip
+    @comment = s.rest.strip
   end
 
   private
@@ -66,7 +67,7 @@ class Reservation
   def parse_time(input)
     case input
       when '-', 'free', '', nil then return nil
-      when 'now' then return DateTime.now
+      when 'now' then return Time.now.utc
       when /\d{1,2}[hrs]+/
         return parse_offset_time(input)
       else

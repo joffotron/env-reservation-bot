@@ -2,6 +2,7 @@
 
 set -eo pipefail
 
-cd "/var/task/reservation-bot"
+GEM_HOME=${LAMBDA_TASK_ROOT}
 bundle config set deployment true
-bundle install --without test development
+bundle config set without 'test development'
+bundle install
