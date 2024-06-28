@@ -1,6 +1,7 @@
 require_relative 'reservation'
 require "ostruct"
 require 'time'
+require 'active_support'
 require 'active_support/core_ext/string'
 require 'active_support/core_ext/time'
 require 'aws-sdk-dynamodb'

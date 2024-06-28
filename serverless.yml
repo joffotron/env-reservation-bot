@@ -1,8 +1,9 @@
 service: reservation-bot
+frameworkVersion: "^3.36.0"
 
 provider:
   name: aws
-  runtime: ruby3.3
+  runtime: ruby3.2
   versionFunctions: false
   stackName: ${self:service}
   region: ${opt:region, 'ap-southeast-2'}

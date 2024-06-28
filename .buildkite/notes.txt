@@ -1,6 +1,6 @@
-docker-compose run --rm compile
+docker compose run --rm compile
 
-docker-compose run --rm -w "/opt/app/" serverless sls deploy --verbose
+docker compose run --rm -w "/opt/app/" serverless sls deploy --verbose
 
 TODO:
 

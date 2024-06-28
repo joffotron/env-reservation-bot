@@ -1,5 +1,6 @@
 require 'strscan'
 require 'time'
+require 'active_support'
 require 'active_support/core_ext/time'
 require 'active_support/core_ext/numeric/time'
 
