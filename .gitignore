@@ -24,3 +24,7 @@ vendor
 .bundle
 .serverless
 node_modules
+bin
+extensions
+gems
+specifications

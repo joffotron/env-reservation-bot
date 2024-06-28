@@ -1,6 +1,25 @@
-docker-compose run --rm compile
+## Steps:
 
-docker-compose run --rm -w "/opt/app/" serverless sls deploy --verbose
+docker compose run --rm compile .buildkite/bundle.sh
+
+Add a new app in Slack, load the config from the manifest, and customise names etc
+Generate the slack verification token
+Install the app to the workspace, then you can generate the oauth token
+
+Put these into AWS Parameter Store
+/reservationbot/slack.bot.oauth.token - from https://api.slack.com/apps/YOURAPP/oauth
+/reservationbot/slack.verification.token from https://api.slack.com/apps/YOURAPP/general
+/reservationbot/supported.envs - set this as a comma separated list
+
+docker compose run --rm -w "/opt/app/" serverless sls deploy --verbose
+
+to deploy the stack
+
+Go to https://api.slack.com/apps/YOURAPP/event-subscriptions and put in the list action URL, e.g.
+
+https://xxxxxxxxx.execute-api.ap-southeast-2.amazonaws.com/dev/list
+
+
 
 TODO:
 
