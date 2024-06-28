@@ -19,7 +19,7 @@ Go to https://api.slack.com/apps/YOURAPP/event-subscriptions and put in the list
 
 https://xxxxxxxxx.execute-api.ap-southeast-2.amazonaws.com/dev/list
 
-
+docker-compose run --rm -w "/opt/app/" serverless sls deploy --verbose
 
 TODO:
 

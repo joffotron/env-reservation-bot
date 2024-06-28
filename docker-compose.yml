@@ -1,9 +1,7 @@
-version: '3.7'
-
 services:
   serverless:
     platform: "linux/amd64"
-    image: amaysim/serverless:3.29.0
+    image: amaysim/serverless:3.36.0
     command: serverless
     volumes:
     - .:/opt/app

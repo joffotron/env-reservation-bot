@@ -1,65 +1,77 @@
 GEM
   remote: https://rubygems.org/
   specs:
-    activesupport (6.1.7.5)
+    activesupport (7.1.3.4)
+      base64
+      bigdecimal
       concurrent-ruby (~> 1.0, >= 1.0.2)
+      connection_pool (>= 2.2.5)
+      drb
       i18n (>= 1.6, < 2)
       minitest (>= 5.1)
+      mutex_m
       tzinfo (~> 2.0)
-      zeitwerk (~> 2.3)
-    aws-eventstream (1.1.0)
-    aws-partitions (1.322.0)
-    aws-sdk-core (3.96.1)
+    aws-eventstream (1.3.0)
+    aws-partitions (1.948.0)
+    aws-sdk-core (3.199.0)
+      aws-eventstream (~> 1, >= 1.3.0)
+      aws-partitions (~> 1, >= 1.651.0)
+      aws-sigv4 (~> 1.8)
+      jmespath (~> 1, >= 1.6.1)
+    aws-sdk-dynamodb (1.115.0)
+      aws-sdk-core (~> 3, >= 3.199.0)
+      aws-sigv4 (~> 1.1)
+    aws-sdk-kms (1.87.0)
+      aws-sdk-core (~> 3, >= 3.199.0)
+      aws-sigv4 (~> 1.1)
+    aws-sdk-lambda (1.123.0)
+      aws-sdk-core (~> 3, >= 3.199.0)
+      aws-sigv4 (~> 1.1)
+    aws-sigv4 (1.8.0)
       aws-eventstream (~> 1, >= 1.0.2)
-      aws-partitions (~> 1, >= 1.239.0)
-      aws-sigv4 (~> 1.1)
-      jmespath (~> 1.0)
-    aws-sdk-dynamodb (1.47.0)
-      aws-sdk-core (~> 3, >= 3.71.0)
-      aws-sigv4 (~> 1.1)
-    aws-sdk-kms (1.31.0)
-      aws-sdk-core (~> 3, >= 3.71.0)
-      aws-sigv4 (~> 1.1)
-    aws-sdk-lambda (1.41.0)
-      aws-sdk-core (~> 3, >= 3.71.0)
-      aws-sigv4 (~> 1.1)
-    aws-sigv4 (1.1.3)
-      aws-eventstream (~> 1.0, >= 1.0.2)
-    concurrent-ruby (1.2.2)
-    faraday (1.0.1)
-      multipart-post (>= 1.2, < 3)
-    faraday_middleware (1.0.0)
-      faraday (~> 1.0)
-    gli (2.19.0)
-    hashie (4.1.0)
-    i18n (1.14.1)
+    base64 (0.2.0)
+    bigdecimal (3.1.8)
+    concurrent-ruby (1.3.3)
+    connection_pool (2.4.1)
+    drb (2.2.1)
+    faraday (2.9.2)
+      faraday-net_http (>= 2.0, < 3.2)
+    faraday-mashify (0.1.1)
+      faraday (~> 2.0)
+      hashie
+    faraday-multipart (1.0.4)
+      multipart-post (~> 2)
+    faraday-net_http (3.1.0)
+      net-http
+    gli (2.21.1)
+    hashie (5.0.0)
+    i18n (1.14.5)
       concurrent-ruby (~> 1.0)
-    jmespath (1.6.1)
-    minitest (5.19.0)
-    multipart-post (2.1.1)
-    slack-ruby-client (0.14.6)
-      activesupport
-      faraday (>= 0.9)
-      faraday_middleware
+    jmespath (1.6.2)
+    minitest (5.24.0)
+    multipart-post (2.4.1)
+    mutex_m (0.2.0)
+    net-http (0.4.1)
+      uri
+    slack-ruby-client (2.3.0)
+      faraday (>= 2.0)
+      faraday-mashify
+      faraday-multipart
       gli
       hashie
-      websocket-driver
     tzinfo (2.0.6)
       concurrent-ruby (~> 1.0)
-    websocket-driver (0.7.2)
-      websocket-extensions (>= 0.1.0)
-    websocket-extensions (0.1.5)
-    zeitwerk (2.6.11)
+    uri (0.13.0)
 
 PLATFORMS
   ruby
 
 DEPENDENCIES
-  activesupport (>= 6.0.3.1)
-  aws-sdk-dynamodb (~> 1.45)
-  aws-sdk-kms (~> 1.30)
-  aws-sdk-lambda (~> 1.30)
-  slack-ruby-client (~> 0.14.6)
+  activesupport (>= 7.1.3.4)
+  aws-sdk-dynamodb (~> 1.115)
+  aws-sdk-kms (~> 1.87)
+  aws-sdk-lambda (~> 1.123)
+  slack-ruby-client (~> 2.3.0)
 
 BUNDLED WITH
-   2.1.4
+   2.5.11

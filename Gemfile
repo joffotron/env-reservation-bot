@@ -1,7 +1,7 @@
 source 'https://rubygems.org'
 
-gem 'aws-sdk-kms', '~> 1.30'
-gem 'aws-sdk-lambda', '~> 1.30'
-gem 'aws-sdk-dynamodb', '~> 1.45'
-gem 'slack-ruby-client', '~> 0.14.6'
-gem "activesupport", ">= 6.0.3.1" 
+gem 'aws-sdk-kms', '~> 1.87'
+gem 'aws-sdk-lambda', '~> 1.123'
+gem 'aws-sdk-dynamodb', '~> 1.115'
+gem 'slack-ruby-client', '~> 2.3.0'
+gem "activesupport", ">= 7.1.3.4"

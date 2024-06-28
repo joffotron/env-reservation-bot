@@ -1,8 +1,9 @@
 service: reservation-bot
+frameworkVersion: "^3.36.0"
 
 provider:
   name: aws
-  runtime: ruby2.7
+  runtime: ruby3.2
   versionFunctions: false
   stackName: ${self:service}
   region: ${opt:region, 'ap-southeast-2'}
@@ -51,6 +52,7 @@ functions:
     environment:
       BOT_TOKEN: ${ssm:/reservationbot/slack.bot.oauth.token}
       DYNAMO_TABLE: ${self:resources.Resources.ReservationsTable.Properties.TableName}
+      SUPPORTED_ENVS: ${ssm:/reservationbot/supported.envs}
 
 resources:
   Resources:
