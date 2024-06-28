@@ -52,6 +52,7 @@ functions:
     environment:
       BOT_TOKEN: ${ssm:/reservationbot/slack.bot.oauth.token}
       DYNAMO_TABLE: ${self:resources.Resources.ReservationsTable.Properties.TableName}
+      SUPPORTED_ENVS: ${ssm:/reservationbot/supported.envs}
 
 resources:
   Resources:
