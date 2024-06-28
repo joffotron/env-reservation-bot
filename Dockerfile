@@ -1,4 +1,4 @@
-FROM lambci/lambda:build-ruby2.7
+FROM lambci/lambda:build-ruby3.3
 
 ENV BASE=/var/task/reservation-bot/
 
