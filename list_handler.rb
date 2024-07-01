@@ -19,7 +19,8 @@ class ListHandler
     {
       environment: reservation.environment,
       user: reservation.user_name,
-      reason: reservation.comment
+      reason: reservation.comment,
+      end_time: reservation.end_time.iso8601,
     }
   end
 

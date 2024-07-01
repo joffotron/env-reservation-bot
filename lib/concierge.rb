@@ -67,8 +67,8 @@ class Concierge
     @dynamo ||= Aws::DynamoDB::Client.new
   end
 
-  def try_date_parse(date_time)
-    date_time.to_datetime.in_time_zone
+  def try_date_parse(dynamo_date_string)
+    DateTime.parse(dynamo_date_string).utc
   rescue
     nil
   end

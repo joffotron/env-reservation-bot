@@ -38,7 +38,7 @@ class Reservation
   def current?
     return false if start_time.nil?
 
-    start_time <= Time.now && (end_time.nil? || end_time >= Time.now)
+    start_time <= Time.now.utc && (end_time.nil? || end_time >= Time.now.utc)
   end
 
   # `@reservebot staging-nz now 1h just testing`
