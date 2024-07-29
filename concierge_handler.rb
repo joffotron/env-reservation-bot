@@ -27,8 +27,12 @@ class ConciergeHandler
         reply(help_me_obi_wan)
       else
         reservation = Reservation.from_message(message: incoming_message, user: requesting_user)
-        Concierge.new.reserve(reservation: reservation)
-        reply(reservation.human_readable)
+        if reservation.valid_env?
+          Concierge.new.reserve(reservation: reservation)
+          reply(reservation.human_readable)
+        else
+          reply(supported_envs)
+        end
     end
   end
 

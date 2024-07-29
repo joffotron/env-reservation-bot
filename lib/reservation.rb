@@ -41,6 +41,10 @@ class Reservation
     start_time <= Time.now.utc && (end_time.nil? || end_time >= Time.now.utc)
   end
 
+  def valid_env?
+    ENV['SUPPORTED_ENVS'].split(',').include?(environment)
+  end
+
   # `@reservebot staging-nz now 1h just testing`
   # `@reservebot demo-au 13:00 -`
   # `@reservebot demo-au free`
