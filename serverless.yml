@@ -8,6 +8,15 @@ provider:
   versionFunctions: false
   stackName: ${self:service}
   region: ${opt:region, 'ap-southeast-2'}
+  deploymentBucket:
+    tags:
+      # The deployment bucket is never in scope for compliance
+      compliance-env: non-production
+    stackTags:
+      service: env-reservation
+      product: operations
+      domain: infrastructure
+      compliance-env: "non-production"
   iamRoleStatements:
   - Effect: "Allow"
     Action:
