@@ -26,6 +26,7 @@ class Concierge
       Reservation.new(
         user:       user,
         environment: item['environment'],
+        repo:       item['repo'],
         start_time: try_date_parse(item['start_time']),
         end_time:   try_date_parse(item['end_time']),
         comment:    item['comment']
@@ -40,6 +41,7 @@ class Concierge
   def make_reservation(reservation)
     item = {
       environment: empty_check(reservation.environment),
+      repo:        empty_check(reservation.repo),
       start_time:  empty_check(reservation.start_time&.rfc3339),
       end_time:    empty_check(reservation.end_time&.rfc3339),
       user_name:   empty_check(reservation.user_name),

@@ -88,6 +88,9 @@ class ConciergeHandler
       // Reserve starting at 1pm with a specific end time (and no comment)
       `@reservebot #{env_list.sample} 13:00 16:45`
 
+      // Optionally specify a repo to reserve (arbitrary string)
+      `@reservebot #{env_list.sample} now 1h Just Testing --repo my-app`
+
       // Release an environment again
       `@reservebot #{env_list.sample} free`
 
