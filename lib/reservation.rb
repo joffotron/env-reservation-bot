@@ -5,7 +5,7 @@ require 'active_support/core_ext/time'
 require 'active_support/core_ext/numeric/time'
 
 class Reservation
-  attr_reader :environment, :start_time, :end_time, :user_name, :timezone, :comment
+  attr_reader :environment, :start_time, :end_time, :user_name, :timezone, :comment, :repo
 
   def self.from_message(message:, user:)
     reservation = Reservation.new(user: user)
@@ -13,13 +13,14 @@ class Reservation
     reservation
   end
 
-  def initialize(user:, environment: nil, start_time: nil, end_time: nil, comment: nil)
+  def initialize(user:, environment: nil, start_time: nil, end_time: nil, comment: nil, repo: nil)
     @user_name = user.name
     @timezone = user.timezone
     @environment = environment
     @start_time = start_time
     @end_time = end_time
     @comment = comment
+    @repo = repo
   end
 
   def human_readable
@@ -27,9 +28,10 @@ class Reservation
 
     end_msg = end_time.nil? ? 'with no specified end' : "until #{format_time(end_time)}"
     reason = comment.nil? ? 'No reason given' : "Reason: #{comment}"
+    repo_msg = repo.nil? ? "Repo `#{repo}` " : ''
 
     <<~MSG
-      Environment `#{environment}` is reserved by #{user_name}
+      #{repo_msg} Environment `#{environment}` is reserved by #{user_name}
       From #{format_time(start_time)}, #{end_msg}
       #{reason}
     MSG
@@ -63,7 +65,14 @@ class Reservation
     @end_time = parse_time(end_input)
     p "Set end time as #{@end_time}"
 
-    @comment = s.rest.strip
+    remaining = s.rest.strip
+    if remaining.include?('--repo')
+      parts = remaining.split('--repo')
+      @comment = parts[0].strip
+      @repo = parts[1].strip if parts[1]
+    else
+      @comment = remaining
+    end
   end
 
   private
